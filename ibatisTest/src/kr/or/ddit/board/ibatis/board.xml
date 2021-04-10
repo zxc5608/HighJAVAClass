@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/dtd-map-2.dtd">
+<sqlMap namespace="jdbc_board">
+
+
+<insert id="insertboard" parameterClass="boardVo">
+
+	
+insert into jdbc_board
+	(board_no, board_title, board_writer, 
+	board_date, board_cnt, board_content)
+	
+	values(board_seq.nextval, #board_title# , 
+			#board_writer# ,sysdate,0, #board_content#)
+</insert>
+
+<delete id="deleteboard" parameterClass="string">
+delete from jdbc_board where board_no = #board_no# 
+</delete>
+
+<update id ="updateboard" parameterClass="boardVo">
+update jdbc_board set
+	 board_title=#board_title#,board_date=sysdate, board_content=#board_content#
+ 		 where board_no= #board_no#  
+</update>
+
+<select id ="selectboard" resultClass="boardVo">
+select board_no, board_title,board_writer,
+to_char(board_date,'yyyy-mm-dd') board_date,
+					 board_cnt,board_content 
+					 
+					 from jdbc_board 
+					 order by board_no desc
+
+</select>
+
+<select id = "getboard" parameterClass="int" resultClass="boardVo" >
+	select board_no, board_title,board_writer,
+					 to_char(board_date,'yyyy-mm-dd') board_date,
+					 board_cnt,board_content 
+					 from jdbc_board 
+					 where board_no = #board_no#
+	
+</select>
+
+<select id="searchboard" resultClass="boardVo" parameterClass="String">
+	select board_no, board_title, board_writer,
+					to_char(board_date,'yyyy-mm-dd') board_date,
+					board_cnt, board_content 
+					from jdbc_board 
+					 where board_title like '%' || #board_title# || '%'
+					 order by board_no desc
+</select>
+
+<update id="setcount" parameterClass="int">
+	update jdbc_board set board_cnt= board_cnt+1
+					 where board_no = #board_no#
+
+
+</update>
+<!-- Map을 parameterClass로 받아서 처리할때 변수명은 Map의 'key값'으로 지정한다.        키값이와야된다
+
+	파라미터로 가져온 값을 컬럼명등의 자리에서 사용할 경우에는
+	달러($) 기호를 사용해서 나타낸다.
+	예)$변수명$ 또는 $key값$
+									$ 로$ 바꿔준다.   ?에는 키값을 넣어준다
+	"update mymember set " + paramMap.get("field") +" = ? where mem_id = ? ";
+			
+-->
+<update id="updateMember2" parameterClass="java.util.Map">
+update mymember set
+		 $field$ = #data# where mem_id = #memId# 
+			
+	
+</update>
+</sqlMap>	

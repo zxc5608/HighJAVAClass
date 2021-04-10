@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/dtd-map-2.dtd">
+<sqlMap namespace="hotelr">
+
+
+<update id="checkin" parameterClass="roVo">
+
+update hotelroom set room_nm= #room_nm#
+	where room_no=#room_no#
+	
+</update>
+
+<delete id = "checkout" parameterClass="string">
+delete from hotelroom where room_no= #room_no#
+</delete>
+
+
+<select id ="getroom" resultClass="roVo">
+select * from hotelroom
+</select>
+</sqlMap>
+ 
